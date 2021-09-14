@@ -90,14 +90,14 @@ YNABConnector = [
     Authentication = [
         Key = []
     ],
-    Label = "TripPin Part 1 - OData"
+    Label = "YNAB Key"
 ];
 
 // Data Source UI publishing description
 YNABConnector.Publish = [
     Beta = true,
     Category = "Other",
-    ButtonText = { "TripPin OData", "TripPin OData" }
+    ButtonText = { "YNAB Power Bi Connector", "YNAB Power Bi Connector" }
 ];
 
 // authenticate 
