@@ -23,9 +23,20 @@ shared YNABConnector.Feed = Value.ReplaceType(YNABConnectorImpl, type function (
 ) as any);*/
 
 [DataSource.Kind="YNABConnector", Publish="YNABConnector.Publish"]
-shared YNABConnector.Feed = Value.ReplaceType(YNABConnectorImpl, type function (budgetName as text) as any);
+shared YNABConnector.Feed = Value.ReplaceType(YNABConnectorImpl, type function (
+    budgetName as (type text meta [
+        Documentation.FieldCaption = "Budget Name",
+        Documentation.FieldDescription = "Enter budget name",
+        Documentation.SampleValues = {"My First Budget"}
+    ]),
+    sinceDate as (type text meta [
+        Documentation.FieldCaption = "Since Date",
+        Documentation.FieldDescription = "Get transcation since specific date",
+        Documentation.SampleValues = {"2021-03-25"}
+    ])
+) as any);
 
-YNABConnectorImpl = (budgetName as text) =>
+YNABConnectorImpl = (budgetName as text, sinceDate as text) =>
     let
         source = Web.Contents("https://api.youneedabudget.com/v1/budgets", [ Headers = DefaultRequestHeaders ]),
         json = Json.Document(source),
@@ -33,7 +44,7 @@ YNABConnectorImpl = (budgetName as text) =>
         budgets = data[budgets],
         budget = Diagnostics.LogValue("budget", List.FindText(budgets, budgetName)),
         BudgetId = Diagnostics.LogValue("BudgetId", List.First(budget)[id]),
-        transactionsSource = Web.Contents("https://api.youneedabudget.com/v1/budgets/" & BudgetId & "/transactions" , [ Headers = DefaultRequestHeaders ]),
+        transactionsSource = Web.Contents("https://api.youneedabudget.com/v1/budgets/" & BudgetId & "/transactions?since_date=" & sinceDate, [ Headers = DefaultRequestHeaders ]),
         
         #"Imported JSON" = Json.Document(transactionsSource),
         data1 = #"Imported JSON"[data],

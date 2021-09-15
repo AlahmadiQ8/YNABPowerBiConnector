@@ -1,4 +1,4 @@
-﻿YNABConnector.Feed("July V2 2021")
+﻿YNABConnector.Feed("July V2 2021", "2021-07-01")
 //YNABConnector.Feed("https://api.youneedabudget.com/v1/budgets")
 
 /*
